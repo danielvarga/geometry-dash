@@ -23,6 +23,7 @@ class Player:
         self.coyote_timer = 0.0
         self.jump_buffer_timer = 0.0
         self.hit_head = False
+        self.hit_wall = False
 
     def reset(self, x: float, y: float) -> None:
         self.rect.topleft = (int(x), int(y))
@@ -32,6 +33,7 @@ class Player:
         self.coyote_timer = 0.0
         self.jump_buffer_timer = 0.0
         self.hit_head = False
+        self.hit_wall = False
 
     def request_jump(self) -> None:
         self.jump_buffer_timer = JUMP_BUFFER_TIME
@@ -47,6 +49,7 @@ class Player:
 
     def update(self, dt: float, solids: list[pygame.Rect], jump_held: bool) -> None:
         self.hit_head = False
+        self.hit_wall = False
 
         if jump_held:
             self.request_jump()
@@ -60,23 +63,32 @@ class Player:
 
         self._try_consume_jump()
 
-        self.rect.x += int(FORWARD_SPEED * dt)
+        dx = int(FORWARD_SPEED * dt)
+        self.rect.x += dx
+        for solid in solids:
+            if not self.rect.colliderect(solid):
+                continue
+            if dx > 0:
+                self.hit_wall = True
+            elif dx < 0:
+                self.hit_wall = True
 
         self.velocity_y += GRAVITY * dt
         if self.velocity_y > MAX_FALL_SPEED:
             self.velocity_y = MAX_FALL_SPEED
 
-        self.rect.y += int(self.velocity_y * dt)
+        dy = int(self.velocity_y * dt)
+        self.rect.y += dy
         self.grounded = False
 
         for solid in solids:
             if not self.rect.colliderect(solid):
                 continue
-            if self.velocity_y > 0:
+            if dy > 0:
                 self.rect.bottom = solid.top
                 self.velocity_y = 0.0
                 self.grounded = True
-            elif self.velocity_y < 0:
+            elif dy < 0:
                 self.rect.top = solid.bottom
                 self.velocity_y = 0.0
                 self.hit_head = True

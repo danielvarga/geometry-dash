@@ -78,6 +78,8 @@ async def main() -> None:
 
             if player.hit_head:
                 state = GameState.DEAD
+            if player.hit_wall:
+                state = GameState.DEAD
 
             if player.rect.top > SCREEN_HEIGHT:
                 state = GameState.DEAD
