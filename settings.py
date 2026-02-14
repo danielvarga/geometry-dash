@@ -1,0 +1,27 @@
+from pathlib import Path
+
+
+SCREEN_WIDTH = 1000
+SCREEN_HEIGHT = 600
+FPS = 60
+
+GRAVITY = 2800.0
+JUMP_VELOCITY = -820.0
+FORWARD_SPEED = 380.0
+MAX_FALL_SPEED = 1800.0
+COYOTE_TIME = 0.08
+JUMP_BUFFER_TIME = 0.12
+
+TILE_SIZE = 40
+
+BACKGROUND_COLOR = (15, 23, 42)
+GROUND_COLOR = (51, 65, 85)
+SPIKE_COLOR = (239, 68, 68)
+END_COLOR = (34, 197, 94)
+PLAYER_COLOR = (56, 189, 248)
+TEXT_COLOR = (241, 245, 249)
+
+WINDOW_TITLE = "Stereo Madness (Pygame Fan Remake)"
+
+BASE_DIR = Path(__file__).parent
+LEVEL_PATH = BASE_DIR / "levels" / "stereo_madness.txt"
