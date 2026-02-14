@@ -10,6 +10,7 @@ from settings import END_COLOR, GROUND_COLOR, SCREEN_HEIGHT, SPIKE_COLOR, TILE_S
 class LevelData:
     solids: list[pygame.Rect]
     spikes: list[pygame.Rect]
+    spike_hitboxes: list[pygame.Rect]
     end_zone: pygame.Rect
     start_pos: tuple[int, int]
     width_px: int
@@ -25,6 +26,7 @@ def load_level(path: Path) -> LevelData:
 
     solids: list[pygame.Rect] = []
     spikes: list[pygame.Rect] = []
+    spike_hitboxes: list[pygame.Rect] = []
     end_zone: pygame.Rect | None = None
     start_pos: tuple[int, int] | None = None
 
@@ -38,6 +40,15 @@ def load_level(path: Path) -> LevelData:
                 solids.append(tile)
             elif char == "^":
                 spikes.append(tile)
+                # Collision is intentionally tighter than visuals so it mostly
+                # follows the red triangle shape instead of the full tile.
+                hitbox = pygame.Rect(
+                    x + int(TILE_SIZE * 0.22),
+                    y + int(TILE_SIZE * 0.16),
+                    int(TILE_SIZE * 0.56),
+                    int(TILE_SIZE * 0.80),
+                )
+                spike_hitboxes.append(hitbox)
             elif char == "S":
                 start_pos = (x, y)
             elif char == "E":
@@ -49,7 +60,14 @@ def load_level(path: Path) -> LevelData:
         raise ValueError("Level is missing 'E' end marker.")
 
     width_px = width * TILE_SIZE
-    return LevelData(solids=solids, spikes=spikes, end_zone=end_zone, start_pos=start_pos, width_px=width_px)
+    return LevelData(
+        solids=solids,
+        spikes=spikes,
+        spike_hitboxes=spike_hitboxes,
+        end_zone=end_zone,
+        start_pos=start_pos,
+        width_px=width_px,
+    )
 
 
 def draw_level(surface: pygame.Surface, level: LevelData, camera_x: int) -> None:

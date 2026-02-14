@@ -71,7 +71,7 @@ async def main() -> None:
         if state == GameState.PLAYING:
             player.update(dt, level.solids, jump_held or mouse_held)
 
-            for spike in level.spikes:
+            for spike in level.spike_hitboxes:
                 if player.rect.colliderect(spike):
                     state = GameState.DEAD
                     break
