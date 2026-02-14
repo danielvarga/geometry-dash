@@ -1,3 +1,4 @@
+import asyncio
 from enum import Enum, auto
 
 import pygame
@@ -16,7 +17,7 @@ class GameState(Enum):
     WIN = auto()
 
 
-def main() -> None:
+async def main() -> None:
     pygame.init()
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     pygame.display.set_caption(WINDOW_TITLE)
@@ -99,9 +100,11 @@ def main() -> None:
             draw_center_message(screen, big_font, font, "Level Complete", "Press Space or Click to Play Again")
 
         pygame.display.flip()
+        # Required for browser/pygbag event loop cooperation.
+        await asyncio.sleep(0)
 
     pygame.quit()
 
 
 if __name__ == "__main__":
-    main()
+    asyncio.run(main())

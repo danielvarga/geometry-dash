@@ -9,6 +9,24 @@ pip install -r requirements.txt
 python main.py
 ```
 
+## Web Build (pygbag / emscripten runtime)
+
+```bash
+pip install pygbag pygame-ce
+python -m pygbag --build .
+```
+
+- Output is generated under `build/web/`.
+- Local preview:
+
+```bash
+python -m pygbag .
+```
+
+- Deploy by uploading the contents of `build/web/` to your static folder:
+  - `https://static.renyi.hu/ai-shared/daniel/squid/`
+  - Ensure `index.html`, `.js`, `.wasm`, and data/assets are all uploaded together.
+
 ## Map Editor
 
 ```bash
